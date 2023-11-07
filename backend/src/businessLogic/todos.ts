@@ -16,7 +16,7 @@ const todosAcess = new TodosAccess()
 
 // function create Todo
 export async function createTodo(newTodo: CreateTodoRequest, userId: string): Promise<TodoItem> {
-    logger.info("Create todo function")
+    logger.info("Start handle create todo function")
     const todoId = uuid.v4()
     const createdAt = new Date().toISOString()
     const s3AttachmentUrl = attachmentUtils.getAttachmentUrl(todoId)
@@ -37,7 +37,7 @@ export async function updateTodo(
     todoId: string,
     todoUpdate: UpdateTodoRequest,
     userId: string): Promise<TodoUpdate> {
-    logger.info('Update todo function')
+    logger.info('Start handle update todo function')
     return todosAcess.updateTodoItem(todoId, userId, todoUpdate)
 }
 
@@ -45,18 +45,18 @@ export async function updateTodo(
 export async function deleteTodo(
     todoId: string,
     userId: string): Promise<string> {
-    logger.info('Delete todo function')
+    logger.info('Start handle delete todo function')
     return todosAcess.deleteTodoItem(todoId, userId)
 }
 
 // function get Toto by user
 export async function getTodosForUser(userId: string): Promise<TodoItem[]> {
-    logger.info('Get todo for user function')
+    logger.info('Start handle get todo for user function')
     return todosAcess.getAllTodos(userId)
 }
 
 //function create attachment for Todo
 export async function createAttachmentPresignedUrl(todoId: string, userId: string): Promise<string> {
-    logger.info('Create attachment presigned url function by: ', userId, todoId)
+    logger.info('Start handle create attachment presigned url function by: ', userId, todoId)
     return attachmentUtils.getUploadUrl(todoId)
 }

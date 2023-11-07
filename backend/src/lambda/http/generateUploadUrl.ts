@@ -13,7 +13,7 @@ export const handler = middy(
     // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
 
     const userId: string = getUserId(event);
-    console.log('generate by userId: ', userId)
+    console.log('Start handle http generate by userId: ', userId)
     const returnUrl: string = await createAttachmentPresignedUrl(todoId, userId);
     return {
       statusCode: 201,

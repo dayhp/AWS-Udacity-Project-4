@@ -1,13 +1,13 @@
 import * as AWS from 'aws-sdk'
-import * as AWSXRay from 'aws-xray-sdk'
+//import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { createLogger } from '../utils/logger'
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate';
-
+const AWSXRay = require('aws-xray-sdk');
 const XAWS = AWSXRay.captureAWS(AWS)
 
-const logger = createLogger('TodosAccess')
+const logger = createLogger('dataAccessLayer/todosAccess')
 
 // TODO: Implement the dataLayer logic
 export class TodosAccess {
@@ -19,7 +19,7 @@ export class TodosAccess {
 
     // function get all todo
     async getAllTodos(userId: string): Promise<TodoItem[]> {
-        logger.info('Call function get all todos start')
+        logger.info('Step1: Start call function get all todos')
         logger.info(`Get get all todos for user ${userId} from ${this.todosTable} table.`)
 
         const result = await this.docClient.query({
@@ -33,14 +33,14 @@ export class TodosAccess {
             .promise()
 
         const items = result.Items
-        logger.info(`Found ${items.length} todos for the user with UserId: ${userId} in ${this.todosTable} table.`)
-        logger.info('Call functuin get all todos end.')
+        logger.info(`Step2: Find ${items.length} todos for the user with UserId: ${userId} in ${this.todosTable} table.`)
+        logger.info('Step3: End functuin get all todos.')
         return items as TodoItem[]
     }
 
     // function create todo
     async createTodoItem(todoItem: TodoItem): Promise<TodoItem> {
-        logger.info('Call function create todos start')
+        logger.info('Step1: Start call function create todos.')
         logger.info(`Putting todo ${todoItem.todoId} into ${this.todosTable} table.`)
 
         const result = await this.docClient
@@ -49,15 +49,15 @@ export class TodosAccess {
                 Item: todoItem
             })
             .promise()
-        logger.info('Todo item create', result)
-        logger.info('Call function create todos emd')
+        logger.info('Step2: Create Toto items.', result)
+        logger.info('Step3: End call function create todos.')
         return todoItem as TodoItem
     }
 
     // function update todo
     async updateTodoItem(todoId: string, userId: string, todoUpdate: TodoUpdate): Promise<TodoUpdate> {
-        logger.info('Call function update todos item start')
-        logger.info(`Update todo item with ID: ${todoId} in ${this.todosTable} table.`)
+        logger.info('Step1: Start call function update todos.')
+        logger.info(`Step2: Update todo item with ID: ${todoId} in ${this.todosTable} table.`)
 
         const result = await this.docClient.update({
             TableName: this.todosTable,
@@ -77,14 +77,14 @@ export class TodosAccess {
             ReturnValues: 'ALL_NEW'
         }).promise()
         const updateItem = result.Attributes
-        logger.info('Call function update todos item end', updateItem)
+        logger.info('Step3: End call function update todos item.', updateItem)
         return updateItem as TodoUpdate
     }
 
     //  function delete item for todo
     async deleteTodoItem(todoId: string, userId: string): Promise<string> {
-        logger.info('Call function delete todos item start')
-        logger.info(`Delete todo item with ID: ${todoId} from ${this.todosTable} table.`)
+        logger.info('Step1: Start call function delete todos.')
+        logger.info(`Step2: Delete todo item with ID: ${todoId} from ${this.todosTable} table.`)
 
         const result = await this.docClient.delete({
             TableName: this.todosTable,
@@ -93,8 +93,8 @@ export class TodosAccess {
                 userId
             }
         }).promise()
-        logger.info('Todo deleted item', result)
-        logger.info('Call function delete todos item end')
+        logger.info('Step3: Todo deleted item', result)
+        logger.info('Step4: End call function delete todos.')
         return todoId as string
     }
 }
